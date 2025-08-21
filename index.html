@@ -211,10 +211,13 @@
         
         // Verificar colisões
         function checkCollision(opponent) {
+            const playerBottom = gameContainer.offsetHeight - 100; // Posição inferior do carro do jogador
+            const playerTop = playerBottom + playerCar.offsetHeight; // Posição superior do carro do jogador
+
             return playerX < opponent.x + opponent.width &&
                    playerX + playerWidth > opponent.x &&
-                   gameContainer.offsetHeight - 100 < opponent.y + opponent.height &&
-                   gameContainer.offsetHeight - 100 + playerCar.offsetHeight > opponent.y;
+                   playerBottom < opponent.y + opponent.height &&
+                   playerTop > opponent.y;
         }
         
         // Atualizar o jogo
