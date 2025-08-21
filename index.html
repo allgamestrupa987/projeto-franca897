@@ -1,0 +1,33 @@
+            finalScoreElement.textContent = `Pontos: ${score}`;
+            gameOverElement.style.display = 'block';
+        }
+        
+        // Iniciar jogo
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            gameSpeed = 2;
+            playerX = 175;
+            
+            scoreElement.textContent = `Pontos: ${score}`;
+            gameOverElement.style.display = 'none';
+            playerCar.style.left = `${playerX}px`;
+            
+            // Remover todos os oponentes
+            opponents.forEach(opponent => {
+                gameContainer.removeChild(opponent.element);
+            });
+            opponents = [];
+            
+            opponentInterval = setInterval(createOpponent, 2000);
+            updateGame();
+        }
+        
+        // Botão de reiniciar
+        restartBtn.addEventListener('click', startGame);
+        
+        // Iniciar o jogo
+        startGame();
+    </script>
+</body>
+</html>
