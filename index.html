@@ -1,10 +1,10 @@
-<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corrida de Carros</title>
+    <title>Corrida de Carros Avançada</title>
     <style>
+        /* Estilos Globais e Container */
         body {
             margin: 0;
             padding: 0;
@@ -12,8 +12,8 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #333;
-            font-family: Arial, sans-serif;
+            background-color: #555; /* Fundo levemente mais claro */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
         
@@ -24,76 +24,121 @@
             background-color: #222;
             overflow: hidden;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            border: 5px solid #444; /* Borda para destacar o container */
         }
         
+        /* Pista e Animação */
         #road {
             position: absolute;
             width: 100%;
             height: 100%;
+            background-color: #444; /* Cor mais escura para a pista */
+        }
+
+        /* Linhas Centrais Animadas */
+        .lane-markings {
+            position: absolute;
+            width: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 100%;
             background: repeating-linear-gradient(
-                0deg,
                 #fff,
                 #fff 40px,
-                #333 40px,
-                #333 80px
+                #444 40px,
+                #444 80px
             );
-            animation: moveRoad 2s linear infinite;
+            animation: moveRoad 1.5s linear infinite; /* Velocidade de animação ajustada */
         }
-        
+
+        /* Faixas laterais para simular bordas da pista */
+        .road-side {
+            position: absolute;
+            top: 0;
+            width: 15%;
+            height: 100%;
+            background-color: #383838;
+            border-right: 5px solid #ffcc00; /* Linha amarela à direita */
+            box-shadow: inset -5px 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .road-side.left {
+            left: 0;
+            border-right: none;
+            border-left: 5px solid #ffcc00; /* Linha amarela à esquerda */
+            box-shadow: inset 5px 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .road-side.right {
+            right: 0;
+        }
+
         @keyframes moveRoad {
             from { background-position: 0 0; }
             to { background-position: 0 80px; }
         }
         
+        /* Carro do Jogador */
         #player-car {
             position: absolute;
             width: 50px;
             height: 80px;
-            bottom: 100px;
+            bottom: 100px; /* Posição fixa na parte inferior */
             left: 175px;
             background-color: #e74c3c;
             border-radius: 10px;
+            border: 3px solid #c0392b;
+            box-shadow: 0 5px 0 #c0392b;
             z-index: 10;
+            transition: background-color 0.1s;
         }
         
-        #player-car::before {
+        #player-car::before { /* Teto/Cabine do Carro */
             content: "";
             position: absolute;
-            width: 30px;
-            height: 20px;
+            width: 40px;
+            height: 30px;
             background-color: #c0392b;
-            top: -10px;
-            left: 10px;
-            border-radius: 5px 5px 0 0;
+            top: 20px;
+            left: 5px;
+            border-radius: 5px;
+            border: 2px solid #a03020;
         }
         
+        /* Carros Oponentes */
         .opponent-car {
             position: absolute;
             width: 50px;
             height: 80px;
             background-color: #3498db;
             border-radius: 10px;
+            border: 3px solid #2980b9;
+            box-shadow: 0 5px 0 #2980b9;
             z-index: 5;
         }
         
-        .opponent-car::before {
+        .opponent-car::before { /* Teto/Cabine do Oponente */
             content: "";
             position: absolute;
-            width: 30px;
-            height: 20px;
+            width: 40px;
+            height: 30px;
             background-color: #2980b9;
-            top: -10px;
-            left: 10px;
-            border-radius: 5px 5px 0 0;
+            top: 20px;
+            left: 5px;
+            border-radius: 5px;
+            border: 2px solid #1a699c;
         }
         
+        /* Interface do Jogo (Score, Game Over) */
         #score {
             position: absolute;
             top: 20px;
             left: 20px;
-            color: white;
-            font-size: 20px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
             z-index: 20;
         }
         
@@ -102,31 +147,58 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
             font-size: 36px;
             text-align: center;
             display: none;
             z-index: 30;
+            border: 5px solid #f39c12;
+            box-shadow: 0 0 40px rgba(243, 156, 18, 0.8);
+        }
+
+        #final-score {
+            font-size: 28px;
+            display: block;
+            margin-top: 10px;
+            color: #f1c40f;
         }
         
         #restart-btn {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background-color: #f39c12;
+            color: #333;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 25px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        #restart-btn:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+        #restart-btn:active {
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <div id="road"></div>
+        <div id="road">
+            <div class="road-side left"></div>
+            <div class="lane-markings"></div>
+            <div class="road-side right"></div>
+        </div>
         <div id="player-car"></div>
         <div id="score">Pontos: 0</div>
         <div id="game-over">
-            Fim de Jogo!<br>
+            Fim de Jogo! 💥<br>
             <span id="final-score">Pontos: 0</span><br><br>
             <button id="restart-btn">Jogar Novamente</button>
         </div>
@@ -140,32 +212,44 @@
         const gameOverElement = document.getElementById('game-over');
         const finalScoreElement = document.getElementById('final-score');
         const restartBtn = document.getElementById('restart-btn');
+        const roadElement = document.getElementById('road');
         
         // Variáveis do jogo
         let gameRunning = true;
         let score = 0;
-        let gameSpeed = 2;
+        let baseGameSpeed = 4; // Velocidade base dos carros
+        let gameSpeed = baseGameSpeed;
+        const playerSpeed = 8; // Velocidade de movimento horizontal do jogador
+        const playerYBottom = 100; // Posição Y fixa do jogador (distância do fundo)
         let playerX = 175;
         let opponents = [];
         let gameLoop;
         let opponentInterval;
+        let opponentCreationRate = 2000; // Inicialmente, cria um a cada 2000ms (2s)
         
         // Tamanhos
         const containerWidth = gameContainer.offsetWidth;
         const playerWidth = playerCar.offsetWidth;
+        const playerHeight = playerCar.offsetHeight;
         
         // Controles
         const keys = {
             ArrowLeft: false,
             ArrowRight: false,
-            ArrowUp: false,
-            ArrowDown: false
         };
+
+        // Posições X (pistas) no container (400px de largura)
+        const lanes = [
+            containerWidth * 0.25 - playerWidth / 2, // Pista esquerda (centralizado)
+            containerWidth * 0.5 - playerWidth / 2,  // Pista central
+            containerWidth * 0.75 - playerWidth / 2  // Pista direita
+        ];
         
         // Eventos de teclado
         document.addEventListener('keydown', function(e) {
-            if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.code)) {
+            if (['ArrowLeft', 'ArrowRight'].includes(e.code)) {
                 keys[e.code] = true;
+                e.preventDefault(); // Evita rolagem da página
             }
             
             // Reiniciar com espaço
@@ -175,13 +259,33 @@
         });
         
         document.addEventListener('keyup', function(e) {
-            if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.code)) {
+            if (['ArrowLeft', 'ArrowRight'].includes(e.code)) {
                 keys[e.code] = false;
             }
         });
         
+        // Mover o player para a posição X
+        function movePlayer() {
+            if (keys.ArrowLeft) {
+                playerX -= playerSpeed;
+            }
+            if (keys.ArrowRight) {
+                playerX += playerSpeed;
+            }
+
+            // Limitar o movimento dentro da área jogável (entre as faixas laterais)
+            const minX = containerWidth * 0.15; // Largura da faixa lateral esquerda
+            const maxX = containerWidth * 0.85 - playerWidth; // Largura do container - largura da faixa lateral direita - largura do carro
+            
+            playerX = Math.max(minX, Math.min(playerX, maxX));
+            
+            playerCar.style.left = `${playerX}px`;
+        }
+        
         // Criar um carro oponente
         function createOpponent() {
+            if (!gameRunning) return;
+
             const opponent = document.createElement('div');
             opponent.className = 'opponent-car';
             
@@ -191,7 +295,7 @@
             opponent.style.width = `${width}px`;
             opponent.style.height = `${height}px`;
             
-            const lanes = [100, 175, 250]; // Posições possíveis nas pistas
+            // Escolhe uma das 3 pistas aleatoriamente
             const x = lanes[Math.floor(Math.random() * lanes.length)];
             
             opponent.style.left = `${x}px`;
@@ -199,40 +303,34 @@
             
             gameContainer.appendChild(opponent);
             
+            // Adiciona o novo oponente com uma velocidade variável
             opponents.push({
                 element: opponent,
                 x: x,
                 y: -height,
                 width: width,
                 height: height,
-                speed: gameSpeed + Math.random() * 2
+                // Velocidade do oponente é a velocidade do jogo + um pouco de variação
+                speed: gameSpeed + Math.random() * 0.5 
             });
         }
         
         // Verificar colisões
         function checkCollision(opponent) {
-            const playerBottom = gameContainer.offsetHeight - 100; // Posição inferior do carro do jogador
-            const playerTop = playerBottom + playerCar.offsetHeight; // Posição superior do carro do jogador
-
+            // A posição Y do carro do jogador é fixa: Altura do container - playerYBottom
+            const playerY = gameContainer.offsetHeight - playerYBottom - playerHeight;
+            
             return playerX < opponent.x + opponent.width &&
                    playerX + playerWidth > opponent.x &&
-                   playerBottom < opponent.y + opponent.height &&
-                   playerTop > opponent.y;
+                   playerY < opponent.y + opponent.height &&
+                   playerY + playerHeight > opponent.y;
         }
         
         // Atualizar o jogo
         function updateGame() {
             if (!gameRunning) return;
             
-            // Mover jogador
-            if (keys.ArrowLeft && playerX > 50) {
-                playerX -= 5;
-            }
-            if (keys.ArrowRight && playerX < containerWidth - playerWidth - 50) {
-                playerX += 5;
-            }
-            
-            playerCar.style.left = `${playerX}px`;
+            movePlayer(); // Mover o jogador com base nas teclas
             
             // Mover oponentes
             for (let i = opponents.length - 1; i >= 0; i--) {
@@ -246,16 +344,26 @@
                     return;
                 }
                 
-                // Remover oponentes que saíram da tela
+                // Remover oponentes que saíram da tela e atualizar score
                 if (opponent.y > gameContainer.offsetHeight) {
                     gameContainer.removeChild(opponent.element);
                     opponents.splice(i, 1);
                     score++;
                     scoreElement.textContent = `Pontos: ${score}`;
                     
-                    // Aumentar dificuldade
+                    // Aumentar dificuldade a cada 5 pontos
                     if (score % 5 === 0) {
-                        gameSpeed += 0.2;
+                        gameSpeed += 0.5; // Aumenta a velocidade
+                        // Diminui o intervalo de criação (min de 500ms)
+                        opponentCreationRate = Math.max(500, opponentCreationRate - 100); 
+                        
+                        // Recria o intervalo com a nova taxa
+                        clearInterval(opponentInterval);
+                        opponentInterval = setInterval(createOpponent, opponentCreationRate);
+                        
+                        // Ajusta a velocidade da animação da estrada
+                        const roadAnimationDuration = 1.5 - ((gameSpeed - baseGameSpeed) * 0.1);
+                        roadElement.style.animationDuration = `${roadAnimationDuration}s`;
                     }
                 }
             }
@@ -277,12 +385,16 @@
         function startGame() {
             gameRunning = true;
             score = 0;
-            gameSpeed = 2;
-            playerX = 175;
+            gameSpeed = baseGameSpeed;
+            opponentCreationRate = 2000;
+            playerX = lanes[1]; // Começa na pista do meio
             
             scoreElement.textContent = `Pontos: ${score}`;
             gameOverElement.style.display = 'none';
             playerCar.style.left = `${playerX}px`;
+            
+            // Resetar a animação da estrada
+            roadElement.style.animationDuration = '1.5s';
             
             // Remover todos os oponentes
             opponents.forEach(opponent => {
@@ -290,14 +402,15 @@
             });
             opponents = [];
             
-            opponentInterval = setInterval(createOpponent, 2000);
-            updateGame();
+            // Inicia o loop de criação de oponentes
+            opponentInterval = setInterval(createOpponent, opponentCreationRate);
+            updateGame(); // Inicia o loop principal do jogo
         }
         
         // Botão de reiniciar
         restartBtn.addEventListener('click', startGame);
         
-        // Iniciar o jogo
+        // Iniciar o jogo na primeira vez
         startGame();
     </script>
 </body>
