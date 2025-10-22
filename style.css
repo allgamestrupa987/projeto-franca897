@@ -1,141 +1,80 @@
-/* Estilos Globais e Container */
-body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #555; /* Fundo levemente mais claro */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
-}
+/* ... (Mantenha os estilos globais, road, player-car, opponent-car) ... */
 
-#game-container {
-    position: relative;
-    width: 400px;
-    height: 600px;
-    background-color: #222;
-    overflow: hidden;
+/* Estilos Específicos para o Menu de Dificuldade */
+#difficulty-menu {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-    border: 5px solid #444; /* Borda para destacar o container */
+    text-align: center;
+    z-index: 40;
+    border: 3px solid #f39c12;
+    /* REMOVIDO: display: none; -> O JavaScript controlará isso */
 }
 
-/* Pista e Animação */
-#road {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #444; /* Cor mais escura para a pista */
+#difficulty-menu button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-/* Linhas Centrais Animadas */
-.lane-markings {
+#easy-btn { background-color: #2ecc71; color: white; }
+#medium-btn { background-color: #f39c12; color: #333; }
+#hard-btn { background-color: #e74c3c; color: white; }
+
+#easy-btn:hover { background-color: #27ae60; }
+#medium-btn:hover { background-color: #d68910; }
+#hard-btn:hover { background-color: #c0392b; }
+
+/* Estilos Específicos para o Ranking */
+#ranking {
     position: absolute;
-    width: 10px;
+    top: 55%;
     left: 50%;
     transform: translateX(-50%);
-    height: 100%;
-    background: repeating-linear-gradient(
-        #fff,
-        #fff 40px,
-        #444 40px,
-        #444 80px
-    );
-    animation: moveRoad 1.5s linear infinite; /* Velocidade de animação ajustada */
-}
-
-/* Faixas laterais para simular bordas da pista */
-.road-side {
-    position: absolute;
-    top: 0;
-    width: 15%;
-    height: 100%;
-    background-color: #383838;
-    border-right: 5px solid #ffcc00; /* Linha amarela à direita */
-    box-shadow: inset -5px 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.road-side.left {
-    left: 0;
-    border-right: none;
-    border-left: 5px solid #ffcc00; /* Linha amarela à esquerda */
-    box-shadow: inset 5px 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.road-side.right {
-    right: 0;
-}
-
-@keyframes moveRoad {
-    from { background-position: 0 0; }
-    to { background-position: 0 80px; }
-}
-
-/* Carro do Jogador */
-#player-car {
-    position: absolute;
-    width: 50px;
-    height: 80px;
-    bottom: 100px; /* Posição fixa na parte inferior */
-    left: 175px;
-    background-color: #e74c3c;
+    width: 80%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px;
     border-radius: 10px;
-    border: 3px solid #c0392b;
-    box-shadow: 0 5px 0 #c0392b;
-    z-index: 10;
-    transition: background-color 0.1s;
+    z-index: 40;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    /* REMOVIDO: display: none; -> O JavaScript controlará isso */
 }
 
-#player-car::before { /* Teto/Cabine do Carro */
-    content: "";
-    position: absolute;
-    width: 40px;
-    height: 30px;
-    background-color: #c0392b;
-    top: 20px;
-    left: 5px;
-    border-radius: 5px;
-    border: 2px solid #a03020;
+#ranking h3 {
+    margin-top: 0;
+    color: #f1c40f;
+    border-bottom: 1px solid #f1c40f;
+    padding-bottom: 5px;
 }
 
-/* Carros Oponentes */
-.opponent-car {
-    position: absolute;
-    width: 50px;
-    height: 80px;
-    background-color: #3498db;
-    border-radius: 10px;
-    border: 3px solid #2980b9;
-    box-shadow: 0 5px 0 #2980b9;
-    z-index: 5;
+#ranking h4 {
+    margin: 10px 0 5px 0;
+    font-size: 1em;
+    color: #bdc3c7;
 }
 
-.opponent-car::before { /* Teto/Cabine do Oponente */
-    content: "";
-    position: absolute;
-    width: 40px;
-    height: 30px;
-    background-color: #2980b9;
-    top: 20px;
-    left: 5px;
-    border-radius: 5px;
-    border: 2px solid #1a699c;
+#ranking ol {
+    padding-left: 20px;
+    list-style-type: decimal;
 }
 
-/* Interface do Jogo (Score, Game Over) */
-#score {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    z-index: 20;
+#ranking li {
+    padding: 2px 0;
+    font-size: 0.9em;
 }
 
+/* Estilos de Game Over (Manter display: none para que não apareça no início) */
 #game-over {
     position: absolute;
     top: 50%;
@@ -147,36 +86,9 @@ body {
     border-radius: 15px;
     font-size: 36px;
     text-align: center;
-    display: none;
+    display: none; /* Mantido no CSS para garantir que não apareça no load */
     z-index: 30;
     border: 5px solid #f39c12;
     box-shadow: 0 0 40px rgba(243, 156, 18, 0.8);
 }
-
-#final-score {
-    font-size: 28px;
-    display: block;
-    margin-top: 10px;
-    color: #f1c40f;
-}
-
-#restart-btn {
-    padding: 12px 25px;
-    background-color: #f39c12;
-    color: #333;
-    border: none;
-    border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 25px;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-#restart-btn:hover {
-    background-color: #e67e22;
-    transform: translateY(-2px);
-}
-#restart-btn:active {
-    transform: translateY(0);
-}
+/* ... (Restante dos seus estilos CSS) ... */
