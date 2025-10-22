@@ -1,7 +1,3 @@
-
-
-JavaScript
-
 // Elementos do jogo
 const gameContainer = document.getElementById('game-container');
 const playerCar = document.getElementById('player-car');
@@ -21,8 +17,8 @@ const hardBtn = document.getElementById('hard-btn');
 // Variáveis do jogo
 let gameRunning = false;
 let score = 0;
-let currentDifficulty = 'medium';
-let baseGameSpeed = 4;
+let currentDifficulty = 'medium'; // Dificuldade padrão
+let baseGameSpeed = 4.5; 
 let gameSpeed = baseGameSpeed;
 const playerSpeed = 8;
 const playerYBottom = 100;
@@ -30,12 +26,12 @@ let playerX = 175;
 let opponents = [];
 let gameLoop;
 let opponentInterval;
-let opponentCreationRate = 2000;
+let opponentCreationRate = 1800; // Taxa padrão
 
 // Ranking (usando Local Storage)
 let highScores = JSON.parse(localStorage.getItem('carRaceHighScores')) || [];
 
-// Tamanhos
+// Tamanhos (Definidos após o DOM carregar)
 const containerWidth = gameContainer.offsetWidth;
 const playerWidth = playerCar.offsetWidth;
 const playerHeight = playerCar.offsetHeight;
@@ -56,18 +52,13 @@ const lanes = [
 // Funções de Gerenciamento de Ranking
 function saveScore(newScore, difficulty) {
     highScores.push({ score: newScore, difficulty: difficulty, date: new Date().toLocaleString() });
-    
-    // Filtra e classifica os 5 melhores por dificuldade (para manter o ranking limpo)
     highScores.sort((a, b) => b.score - a.score); 
-    
-    // Armazena no Local Storage
     localStorage.setItem('carRaceHighScores', JSON.stringify(highScores));
 }
 
 function displayRanking() {
     rankingElement.innerHTML = '<h3>Ranking</h3>';
     
-    // Agrupa e exibe os 3 melhores de cada dificuldade
     const difficulties = ['easy', 'medium', 'hard'];
     
     difficulties.forEach(diff => {
@@ -89,7 +80,7 @@ function displayRanking() {
         rankingElement.innerHTML += html;
     });
 
-    rankingElement.style.display = 'block'; // Garante que o ranking está visível
+    rankingElement.style.display = 'block'; 
 }
 
 // Funções de Dificuldade
@@ -98,12 +89,12 @@ function setDifficulty(difficulty) {
     
     switch (difficulty) {
         case 'easy':
-            baseGameSpeed = 3.5; // Velocidade base um pouco maior que 3
-            opponentCreationRate = 2200; // Intervalo um pouco menor que 2500
+            baseGameSpeed = 3.5;
+            opponentCreationRate = 2200;
             break;
         case 'medium':
-            baseGameSpeed = 4.5; // Velocidade base
-            opponentCreationRate = 1800; // Intervalo
+            baseGameSpeed = 4.5;
+            opponentCreationRate = 1800;
             break;
         case 'hard':
             baseGameSpeed = 6;
@@ -112,7 +103,7 @@ function setDifficulty(difficulty) {
     }
     
     gameSpeed = baseGameSpeed;
-    startGame(); // Inicia o jogo imediatamente após a seleção
+    startGame(); // Inicia o jogo
 }
 
 // Lógica de Controles e Movimento
@@ -121,13 +112,9 @@ document.addEventListener('keydown', function(e) {
         keys[e.code] = true;
         e.preventDefault();
     }
-    // Permite iniciar o jogo com a barra de espaço se o menu estiver aberto
-    if (e.code === 'Space' && !gameRunning) {
-        if (difficultyMenu.style.display !== 'none') {
-             setDifficulty(currentDifficulty); // Usa a dificuldade atual (padrão é 'medium')
-        } else if (gameOverElement.style.display !== 'none') {
-             showMenu(); // Volta para o menu inicial
-        }
+    // Inicia o jogo com a barra de espaço se o menu estiver visível
+    if (e.code === 'Space' && !gameRunning && difficultyMenu.style.display !== 'none') {
+        setDifficulty(currentDifficulty);
     }
 });
 
@@ -182,7 +169,7 @@ function createOpponent() {
     });
 }
 
-// Colisão e Update
+// Colisão
 function checkCollision(opponent) {
     const playerY = gameContainer.offsetHeight - playerYBottom - playerHeight;
     
@@ -192,6 +179,7 @@ function checkCollision(opponent) {
            playerY + playerHeight > opponent.y;
 }
 
+// Atualização do Jogo
 function updateGame() {
     if (!gameRunning) return;
     
@@ -213,12 +201,11 @@ function updateGame() {
             score++;
             scoreElement.textContent = `Pontos: ${score}`;
             
-            // Aceleração progressiva, independente do nível de dificuldade
             if (score % 5 === 0) {
                 gameSpeed += 0.2; 
                 
                 // Ajusta a velocidade da animação da estrada
-                const roadAnimationDuration = 1.5 / (gameSpeed / baseGameSpeed); // Fórmula para ligar velocidade do jogo e da animação
+                const roadAnimationDuration = 1.5 / (gameSpeed / baseGameSpeed);
                 roadElement.style.animationDuration = `${roadAnimationDuration}s`;
             }
         }
@@ -233,23 +220,23 @@ function gameOver() {
     cancelAnimationFrame(gameLoop);
     clearInterval(opponentInterval);
     
-    // Salva a pontuação
     saveScore(score, currentDifficulty);
 
     finalScoreElement.textContent = `Pontos: ${score} (${currentDifficulty.toUpperCase()})`;
     gameOverElement.style.display = 'block';
 }
 
+// Função para exibir o Menu Inicial e Ranking
 function showMenu() {
-    // Para garantir que o jogo pare
+    // Para o jogo
     gameRunning = false;
     cancelAnimationFrame(gameLoop);
     clearInterval(opponentInterval);
 
-    // Limpa a tela para mostrar o menu
+    // Esconde Game Over
     gameOverElement.style.display = 'none';
     
-    // Remove todos os carros que sobraram
+    // Remove carros restantes
     opponents.forEach(opponent => {
         gameContainer.removeChild(opponent.element);
     });
@@ -259,7 +246,7 @@ function showMenu() {
     difficultyMenu.style.display = 'block';
     displayRanking();
 
-    // Reinicia o estado para o padrão
+    // Reseta posição e velocidade
     gameSpeed = baseGameSpeed;
     playerX = lanes[1];
     playerCar.style.left = `${playerX}px`;
@@ -271,7 +258,6 @@ function startGame() {
     gameRunning = true;
     score = 0;
     
-    // Reseta a velocidade para a base do nível selecionado
     gameSpeed = baseGameSpeed; 
     
     scoreElement.textContent = `Pontos: ${score}`;
@@ -281,17 +267,19 @@ function startGame() {
     
     playerX = lanes[1];
     playerCar.style.left = `${playerX}px`;
-    roadElement.style.animationDuration = '1.5s'; // Reseta a animação
+    roadElement.style.animationDuration = '1.5s';
 
+    // Os oponentes já foram removidos em showMenu, mas mantemos isso por segurança
     opponents.forEach(opponent => {
-        gameContainer.removeChild(opponent.element);
+        if (opponent.element.parentNode) {
+            gameContainer.removeChild(opponent.element);
+        }
     });
     opponents = [];
     
-    // Inicia o loop de criação de oponentes com base na dificuldade
     clearInterval(opponentInterval);
     opponentInterval = setInterval(createOpponent, opponentCreationRate);
-    updateGame(); // Inicia o loop principal do jogo
+    updateGame();
 }
 
 // Event Listeners
@@ -301,4 +289,4 @@ hardBtn.addEventListener('click', () => setDifficulty('hard'));
 restartBtn.addEventListener('click', showMenu); // O botão de Game Over agora volta para o Menu
 
 // Inicialização: Exibe o menu de dificuldade e o ranking ao carregar
-showMenu();
+document.addEventListener('DOMContentLoaded', showMenu);

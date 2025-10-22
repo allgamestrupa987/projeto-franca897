@@ -1,6 +1,6 @@
-/* ... (Mantenha os estilos globais, road, player-car, opponent-car) ... */
+/* ... (Seus estilos globais) ... */
 
-/* Estilos Específicos para o Menu de Dificuldade */
+/* Ajuste: Aumentar z-index para garantir cliques */
 #difficulty-menu {
     position: absolute;
     top: 30%;
@@ -11,31 +11,15 @@
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    z-index: 40;
+    z-index: 50; /* Aumentado! */
     border: 3px solid #f39c12;
-    /* REMOVIDO: display: none; -> O JavaScript controlará isso */
 }
 
 #difficulty-menu button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    /* ... (Mantenha os estilos dos botões) ... */
 }
 
-#easy-btn { background-color: #2ecc71; color: white; }
-#medium-btn { background-color: #f39c12; color: #333; }
-#hard-btn { background-color: #e74c3c; color: white; }
-
-#easy-btn:hover { background-color: #27ae60; }
-#medium-btn:hover { background-color: #d68910; }
-#hard-btn:hover { background-color: #c0392b; }
-
-/* Estilos Específicos para o Ranking */
+/* Ajuste: Aumentar z-index para garantir cliques */
 #ranking {
     position: absolute;
     top: 55%;
@@ -46,49 +30,14 @@
     color: white;
     padding: 15px;
     border-radius: 10px;
-    z-index: 40;
+    z-index: 45; /* Aumentado! (Um pouco abaixo do menu principal) */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    /* REMOVIDO: display: none; -> O JavaScript controlará isso */
 }
 
-#ranking h3 {
-    margin-top: 0;
-    color: #f1c40f;
-    border-bottom: 1px solid #f1c40f;
-    padding-bottom: 5px;
-}
-
-#ranking h4 {
-    margin: 10px 0 5px 0;
-    font-size: 1em;
-    color: #bdc3c7;
-}
-
-#ranking ol {
-    padding-left: 20px;
-    list-style-type: decimal;
-}
-
-#ranking li {
-    padding: 2px 0;
-    font-size: 0.9em;
-}
-
-/* Estilos de Game Over (Manter display: none para que não apareça no início) */
-#game-over {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 30px;
-    border-radius: 15px;
-    font-size: 36px;
-    text-align: center;
-    display: none; /* Mantido no CSS para garantir que não apareça no load */
-    z-index: 30;
-    border: 5px solid #f39c12;
-    box-shadow: 0 0 40px rgba(243, 156, 18, 0.8);
-}
 /* ... (Restante dos seus estilos CSS) ... */
+
+/* Estilos de Game Over */
+#game-over {
+    /* ... (Mantenha os estilos existentes de game-over) ... */
+    z-index: 55; /* Deve ser o mais alto */
+}
